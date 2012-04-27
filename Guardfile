@@ -10,7 +10,7 @@ module ::Guard
     def run_on_change(paths)
       paths.each do |path|
         full_path = File.join(@working_path, path)
-        if true
+        if system "scp \"#{full_path}\" linode:/srv/http/Torrents"
           Notifier.notify "Uploaded #{path} to linode."
           puts "Uploaded #{path} to linode."
           File.delete full_path
