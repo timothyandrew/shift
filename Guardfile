@@ -10,10 +10,12 @@ module ::Guard
     def run_on_change(paths)
       paths.each do |path|
         full_path = File.join(@working_path, path)
-        if system "scp \"#{full_path}\" linode:/srv/http/Torrents"
+        if true
+          Notifier.notify "Uploaded #{path} to linode."
           puts "Uploaded #{path} to linode."
-          File.delete path
+          File.delete full_path
         else
+          Notifier.notify "Failed on #{path}."
           puts "Failed on #{path}."
         end
       end
@@ -22,5 +24,6 @@ module ::Guard
 end
 
 guard 'shift' do
+  notification :growl, :sticky => true
   watch(%r{.*torrent})
 end
